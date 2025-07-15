@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: blue-prism-converter
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn app:app
+    autoDeploy: true
+    envVars:
+      - key: FLASK_ENV
+        value: production
