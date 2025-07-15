@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Blue Prism to PAD Converter</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 2em;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 1em;
+        }
+
+        pre {
+            background: #f0f0f0;
+            padding: 1em;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Blue Prism → PAD Converter</h1>
+
+    <label for="input">Paste Blue Prism XML:</label>
+    <textarea id="input"></textarea>
+
+    <button onclick="convert()">Convert</button>
+
+    <h2>Output (PAD code):</h2>
+    <pre id="output">// Waiting...</pre>
+
+    <script>
+        async function convert() {
+            const xml = document.getElementById("input").value;
+            const output = document.getElementById("output");
+            output.textContent = "// Converting...";
+
+            try {
+                const res = await fetch("http://127.0.0.1:5000/convert", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ xmlCode: xml })
+                });
+
+                const data = await res.json();
+                output.textContent = data.padCode || "// No output";
+            } catch (err) {
+                output.textContent = "// Error connecting to server.";
+                console.error(err);
+            }
+        }
+    </script>
+
+</body>
+
+</html>
